@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobile Camera App</title>
+  <style>
+    body {
+      margin: 0;
+      width: 100vw;
+      height: 100svh;
+      overflow: hidden;
+    }
+
+    .video-wrapper {
+      width: 100%;
+      max-width: 432px;
+      height: 100%;
+      max-height: 1280px;
+      position: relative;
+      margin-inline: auto;
+    }
+
+    #camera {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+      /* Flip camera image horizontally */
+    }
+
+    #controls {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #shutterButton,
+    #galleryButton {
+      background-color: #b4b4b4;
+      color: #fff;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #galleryButton {
+      background-color: #363636;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="video-wrapper">
+    <video id="camera" autoplay></video>
+    <div id="controls">
+      <button id="shutterButton">shoot</button>
+      <!-- <button id="galleryButton">galeria</button> -->
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async function () {
+      const video = document.getElementById("camera")
+      const shutterButton = document.getElementById("shutterButton")
+      const galleryButton = document.getElementById("galleryButton")
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        })
+        video.srcObject = stream
+      } catch (error) {
+        console.error("Error accessing the camera:", error)
+      }
+
+      shutterButton.addEventListener("click", async function () {
+        await takePhoto()
+      })
+
+      galleryButton.addEventListener("click", async function () {
+        await openGallery()
+      })
+
+      async function takePhoto() {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const base64Uri = canvas.toDataURL("image/png")
+
+        try {
+          const apiUrl = 'https://calm-clam-52.deno.dev/'
+
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              image: base64Uri,
+            })
+          })
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`)
+          }
+
+          const responseData = await response.json()
+          console.log('Success:', responseData)
+        } catch (err) {
+          console.error('Error:', err)
+        }
+      }
+
+      async function openGallery() {
+        // Your code to open the user's media gallery goes here
+        // You can use the File Input element or any appropriate method
+      }
+    })
+  </script>
+</body>
+
+</html>
