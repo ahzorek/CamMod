@@ -82,11 +82,13 @@
       }
 
       shutterButton.addEventListener("click", async function () {
+        video.pause()
         shutterButton.disabled = true
         shutterButton.textContent = 'sending'
         await takePhoto()
         shutterButton.disabled = false
         shutterButton.textContent = 'shoot'
+        video.play()
       })
 
       galleryButton.addEventListener("click", async function () {
