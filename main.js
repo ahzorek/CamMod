@@ -57,13 +57,22 @@ Deno.serve(async (req) => {
 
     }
     else {
-        return new Response(JSON.stringify({ message: 'success' }), {
-            status: 200,
-            headers: {
-                "content-type": "application/json",
-                "access-control-allow-origin": "*"
-            },
-        })
+          const pathname = new URL(req.url).pathname;
+
+          if (pathname === "/app") {
+            return serveFile(req, "./index.html")
+          }
+        
+          if (pathname.startsWith("/static")) {
+            return serveDir(req, {
+              fsRoot: "public",
+              urlRoot: "static",
+            })
+          }
+        
+          return new Response("404: Not Found", {
+            status: 404,
+          })
     }
 
 })
