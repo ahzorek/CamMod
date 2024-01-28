@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mobile Camera App</title>
+  <title>Camera Module + image upload cloudinary</title>
   <style>
     body {
       margin: 0;
@@ -40,17 +40,17 @@
 
     #shutterButton,
     #galleryButton {
-      background-color: #b4b4b4;
+      background-color: #333333;
       color: #fff;
       padding: 10px 20px;
       margin: 0 10px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
     }
 
     #galleryButton {
-      background-color: #363636;
+      background-color: #888888;
     }
   </style>
 </head>
@@ -135,8 +135,7 @@
       }
 
       async function openGallery() {
-        // Your code to open the user's media gallery goes here
-        // You can use the File Input element or any appropriate method
+        console.log('user abriu galeria')
       }
     })
   </script>
