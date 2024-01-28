@@ -47,7 +47,7 @@ Deno.serve(async (req) => {
 
 
 
-        return new Response(JSON.stringify(result), {
+        return new Response(JSON.stringify(res), {
             status: 200,
             headers: {
                 "content-type": "application/json",
